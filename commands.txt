@@ -1,0 +1,12 @@
+#commands to download sra and fastq files of 10 H1 and 10 HEK293 samples
+
+prefetch -O . $(<SRR_H1.txt)
+
+fastq-dump --outdir fastq --split-3 –gzip $(</data/gent/vo/000/gvo00056/vsc42347/InternshipLeuven/H1_fastq/SRR_H1.txt) 
+
+#perform fastqc 
+mkdir fastqc 
+fastqc -t 8 *.fastq.gz -o ./fastqc 
+
+#perform multiQC in fastq folder
+multqc .
