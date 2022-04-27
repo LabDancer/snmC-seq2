@@ -1,0 +1,21 @@
+#!/bin/bash 
+
+#PBS -l walltime=1:00:00
+#PBS -l nodes=1:ppn=8
+#PBS -l vmem=60gb
+#PBS -M julie.morscio@ugent.be
+#PBS -m abe
+#PBS -N samtools_sort
+
+module load SAMtools/1.14-GCC-11.2.0
+
+$PBS_O_WORKDIR = /data/gent/vo/000/gvo00056/vsc42347/InternshipLeuven/H1_fastq/6_bismark/dedup/filtered/sort 
+cd $PBS_O_WORKDIR 
+
+module load SAMtools/1.14-GCC-11.2.0 
+
+samtools sort /data/gent/vo/000/gvo00056/vsc42347/InternshipLeuven/H1_fastq/6_bismark/dedup/filtered/SRR10470168_R2_pair_bismark_bt2.deduplicated.filtered.bam > /data/gent/vo/000/gvo00056/vsc42347/InternshipLeuven/H1_fastq/6_bismark/dedup/filtered/sort/SRR10470168_R2_pair_bismark_bt2.deduplicated.filtered.sorted.bam
+
+#for f in /data/gent/vo/000/gvo00056/vsc42347/InternshipLeuven/H1_fastq/6_bismark/dedup/*.bam; do samtools view -bS -@ 6 -F 4 -F 256 -q 10 /data/gent/vo/000/gvo00056/vsc42347/InternshipLeuven/H1_fastq/6_bismark/dedup/*.bam > "$f"_filtered.bam; done
+
+#for f in /data/gent/vo/000/gvo00056/vsc42347/InternshipLeuven/H1_fastq/6_bismark/dedup/*.bam; do samtools view -bS -@ 6 -F 4 -F 256 -q 10 /data/gent/vo/000/gvo00056/vsc42347/InternshipLeuven/H1_fastq/6_bismark/dedup/*.bam | samtools sort > "$f"_sorted.bam; done
