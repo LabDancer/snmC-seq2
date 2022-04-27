@@ -1,0 +1,15 @@
+#!/bin/bash -l
+
+#PBS -l walltime=5:00:00
+#PBS -l nodes=1:ppn=8
+#PBS -l vmem=60gb
+#PBS -M julie.morscio@ugent.be
+#PBS -m abe
+#PBS -N run_bismark
+
+module load Bismark/0.20.1-intel-2018b
+
+$PBS_O_WORKDIR = /data/gent/vo/000/gvo00056/vsc42347/InternshipLeuven/H1_fastq/6_bismark
+cd $PBS_O_WORKDIR
+
+bismark --multicore 8 /data/gent/vo/000/gvo00056/vsc42347/InternshipLeuven1/Run_Bismark/Homo_sapiens/UCSC/hg38/Sequence/WholeGenomeFasta/ /data/gent/vo/000/gvo00056/vsc42347/InternshipLeuven/H1_fastq/4_trimmomatic/SRR10470177_R*_pair.fastq.gz
