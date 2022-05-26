@@ -7,14 +7,20 @@
 #PBS -m abe
 #PBS -N samtools_view
 
-module load SAMtools/1.14-GCC-11.2.0
+module load SAMtools/1.15-GCC-11.2.0
 
-$PBS_O_WORKDIR = /data/gent/vo/000/gvo00056/vsc42347/InternshipLeuven/H1_fastq/6_bismark/dedup/sort 
-cd $PBS_O_WORKDIR 
+#$PBS_O_WORKDIR=/data/gent/vo/000/gvo00056/vsc42347/InternshipLeuven/H1_fastq/6_bismark/dedup/filtered
+#cd $PBS_O_WORKDIR 
 
-module load SAMtools/1.14-GCC-11.2.0 
+OUTPUTFOLDER=/data/gent/vo/000/gvo00056/vsc42347/InternshipLeuven/H1_fastq/6_bismark/dedup/filtered
 
-samtools view -bS -@ 6 -F 4 -F 256 -q 10 /data/gent/vo/000/gvo00056/vsc42347/InternshipLeuven/H1_fastq/6_bismark/dedup/SRR10470168_R2_pair_bismark_bt2.deduplicated.bam > /data/gent/vo/000/gvo00056/vsc42347/InternshipLeuven/H1_fastq/6_bismark/dedup/filtered/SRR10470168_R2_pair_bismark_bt2.deduplicated.filtered.bam
+#$FILES = /data/gent/vo/000/gvo00056/vsc42347/InternshipLeuven/H1_fastq/6_bismark/dedup/
+#for f in /data/gent/vo/000/gvo00056/vsc42347/InternshipLeuven/H1_fastq/6_bismark/dedup/*.bam; do echo $f >> "test.txt"; done
+
+#for f in $FILES;  do samtools view -bS -@ 6 -F 4 -F 256 -q 10  > "$f"_filtered.bam; done
+for f in /data/gent/vo/000/gvo00056/vsc42347/InternshipLeuven/H1_fastq/6_bismark/dedup/*.bam;  do samtools view -bS -@ 6 -F 4 -F 256 -q 10 $f > $OUTPUTFOLDER/"$f"_filtered.bam; done
+
+#samtools view -bS -@ 6 -F 4 -F 256 -q 10 /data/gent/vo/000/gvo00056/vsc42347/InternshipLeuven/H1_fastq/6_bismark/dedup/SRR10470168_R2_pair_bismark_bt2.deduplicated.bam > /data/gent/vo/000/gvo00056/vsc42347/InternshipLeuven/H1_fastq/6_bismark/dedup/filtered/SRR10470168_R2_pair_bismark_bt2.deduplicated.filtered.bam
 
 #for f in /data/gent/vo/000/gvo00056/vsc42347/InternshipLeuven/H1_fastq/6_bismark/dedup/*.bam; do samtools view -bS -@ 6 -F 4 -F 256 -q 10 /data/gent/vo/000/gvo00056/vsc42347/InternshipLeuven/H1_fastq/6_bismark/dedup/*.bam > "$f"_filtered.bam; done
 
