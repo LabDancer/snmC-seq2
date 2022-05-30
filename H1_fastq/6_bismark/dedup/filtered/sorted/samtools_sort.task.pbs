@@ -1,0 +1,21 @@
+#!/bin/bash 
+
+#PBS -l walltime=1:00:00
+#PBS -l nodes=1:ppn=8
+#PBS -l vmem=60gb
+#PBS -M julie.morscio@ugent.be
+#PBS -m abe
+#PBS -N samtools_sort
+
+module load SAMtools/1.14-GCC-11.2.0
+
+#specify wd
+$PBS_O_WORKDIR=/data/gent/vo/000/gvo00056/vsc42347/InternshipLeuven/H1_fastq/6_bismark/dedup/filtered/sorted
+
+#in for loop, specify $s which refers to basename of bam file
+for f in /data/gent/vo/000/gvo00056/vsc42347/InternshipLeuven/H1_fastq/6_bismark/dedup/filtered/*bam
+do
+    s=$(basename $f .bam)
+    samtools sort $f > $PBS_O_WORKDIR/"$s"_sorted.bam
+done
+
