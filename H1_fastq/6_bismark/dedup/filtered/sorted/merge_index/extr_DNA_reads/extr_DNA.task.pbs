@@ -1,0 +1,27 @@
+#!/bin/bash 
+
+#PBS -l walltime=1:00:00
+#PBS -l nodes=1:ppn=8
+#PBS -l vmem=60gb
+#PBS -M julie.morscio@ugent.be
+#PBS -m abe
+#PBS -N extr_DNA
+
+#load pysam
+module load Pysam/0.17.0-GCC-11.2.0 
+
+#specify wd
+PBS_O_WORKDIR=/data/gent/vo/000/gvo00056/vsc42347/InternshipLeuven/H1_fastq/6_bismark/dedup/filtered/sorted/merge_index
+cd $PBS_O_WORKDIR
+
+for f in $PBS_O_WORKDIR/*bam
+do
+    s=$(basename $f .merged.bam)
+    python3 $PBS_O_WORKDIR/extr_DNA_reads/mct_iterpair_bam_filter.py $f $PBS_O_WORKDIR/extr_DNA_reads/"$s".DNA.bam 0.5 3 snmCAT_PBAT
+done
+
+
+
+
+
+
