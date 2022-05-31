@@ -1,0 +1,22 @@
+#!/bin/bash 
+
+#PBS -l walltime=00:10:00
+#PBS -l nodes=1:ppn=1
+#PBS -l vmem=20gb
+#PBS -M julie.morscio@ugent.be
+#PBS -m abe
+#PBS -N meth_extr
+
+module load Bismark/0.23.1-foss-2021b
+module load SAMtools/1.14-GCC-11.2.0
+
+#specify wd
+PBS_O_WORKDIR=/data/gent/vo/000/gvo00056/vsc42347/InternshipLeuven/H1_fastq/6_bismark/dedup/filtered/sorted/merge_index/extr_DNA_reads
+
+for f in $PBS_O_WORKDIR/*.DNA.bam
+do
+    bismark_methylation_extractor --CX --bedGraph --gzip $f -o $PBS_O_WORKDIR/meth_extrac
+done
+
+
+
