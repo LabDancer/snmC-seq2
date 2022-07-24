@@ -1,0 +1,43 @@
+# input file: bed file overlapping cov file en TSS coordinates (output bedtools closest)
+fixpos <- data.frame(c(-1099:1099))
+tail(fixpos)
+head(fixpos)
+colnames(fixpos) <- c("refdist")
+results <- read.table("dist_hg38TSS_Huiwen3.bed ", header=FALSE, sep="\t")
+head(results)
+
+#select necessary columns
+results <- results[ , c(1, 2, 4, 5, 6, 13)]
+head(results)
+colnames(results) <- c("chrom", "pos", "methper","methcnt","unmethcnt","refdist")
+head(results)
+fh <- results
+dim(fh)
+subfh <- subset(fh, refdist < 1100 & refdist > -1100)
+
+subfh <- subfh[order(subfh$refdist),]
+head(subfh)
+dim(subfh)
+
+#aggoption == "AggCountPer" from script Huiwen plot/plot.nome.methylprofile.R
+dtib <- subfh %>% group_by(refdist) %>% summarise(methcnt=sum(methcnt), unmethcnt=sum(unmethcnt)) %>% mutate(aggmethper=methcnt/(methcnt+unmethcnt)) %>% select(refdist, aggmethper) %>% distinct()
+head(dtib)
+dt <- as.data.frame(dtib)
+dt$aggmethper <- dt$aggmethper*100
+head(dt)
+dt$smoothmethper <- rollapply(dt$aggmethper, width=50, mean, align="center", partial=TRUE, by=1)
+fdt <- merge(fixpos, dt, by = c("refdist"), all.x=TRUE)
+head(fdt)
+
+ggplot(dt, aes(x=refdist, y=smoothmethper)) + geom_line() + ylim(0,100)
+
+#aggoption == "PerTrimMean" from script Huiwen plot/plot.nome.methylprofile.R
+dtib2 <- subfh %>% group_by(refdist) %>% mutate(aggmethper=mean(methper, trim=0.05)) %>% select(refdist, aggmethper) %>% distinct()
+dt2 <- as.data.frame(dtib2)
+dt2$aggmethper <- dt2$aggmethper*100
+head(dt2)
+dt2$smoothmethper <- rollapply(dt2$aggmethper, width=50, mean, align="center", partial=TRUE, by=1)
+fdt2 <- merge(fixpos, dt2, by = c("refdist"), all.x=TRUE)
+head(fdt2)
+
+ggplot(dt2, aes(x=refdist, y=smoothmethper)) + geom_line() + ylim(0,10000)
